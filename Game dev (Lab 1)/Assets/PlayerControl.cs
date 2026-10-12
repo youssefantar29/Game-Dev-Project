@@ -13,6 +13,12 @@ public class PlayerControl : MonoBehaviour
     public float groundCheckRadius;
     public LayerMask whatIsGround;
     private bool grounded;
+    private Animator anim;
+    public Transform Target;
+    public float Camerspeed;
+    public float minX,MaxX;
+    public float minY,maxY;
+    
 
 
     // Start is called before the first frame update
@@ -24,7 +30,7 @@ public class PlayerControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKeyDown(Spacebar)) &&grounded //When user presses the space button ONCE
+        if (Input.GetKeyDown(Spacebar) && grounded)  //When user presses the space button ONCE
         {
             Jump(); //see function definition below
         }
@@ -50,17 +56,25 @@ public class PlayerControl : MonoBehaviour
                 GetComponent<SpriteRenderer>().flipX = false;
             }
         }
+       anim.SetFloat("Speed",Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x));
+       
+Vector2 newCamPosition = Vector2.Lerp(transform.position, Target.position, Time.deltaTime * Cameraspeed);
+
+if(Target != null)
+{
     }
 
     void Jump()
     {
         GetComponent<Rigidbody2D>().velocity = new Vector2(GetComponent<Rigidbody2D>().velocity.x, jumpHeight);
         //player character jumps vertically along the y-axis without disrupting horizontal walk
+        anim.SetFloat("Height", GetComponent<Rigidbody2D>().velocity.y);
     }
 
 void FixedUpdate(){
 grounded= Physics2D.OverlapCircle(groundCheck.position, groundCheckRadius, whatIsGround);
 
 
-}
+    }
+    }
 }
